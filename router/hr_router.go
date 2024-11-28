@@ -15,4 +15,6 @@ func SetupHRRoutes(app *fiber.App) {
 	hrGroup.Get("/:id", controller.GetHrById)
 	hrGroup.Put("/:id", controller.UpdateHr)
 	hrGroup.Delete("/:id", controller.DeleteHr)
+	hrGroup.Post("/login", controller.LoginHr)
+	hrGroup.Post("/logout", controller.Logout)
 }
