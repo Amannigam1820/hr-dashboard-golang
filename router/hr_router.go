@@ -10,5 +10,6 @@ func SetupHRRoutes(app *fiber.App) {
 	hrGroup := app.Group("/api/hr")
 
 	// Define the HR routes
-	hrGroup.Post("/", controller.CreateHr) // Create HR
+	hrGroup.Post("/", controller.CreateHr)
+	hrGroup.Get("/all", controller.GetAllHr)
 }
