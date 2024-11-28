@@ -70,3 +70,19 @@ func GetAllHr(c *fiber.Ctx) error {
 		"success": true,
 	})
 }
+
+func GetHrById(c *fiber.Ctx) error {
+	var hr model.Hr
+	id := c.Params("id")
+	if err := database.DBConn.First(&hr, id).Error; err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"success": false,
+			"error":   "HR record not found",
+		})
+	}
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"success": true,
+		"hr":      hr,
+	})
+
+}
