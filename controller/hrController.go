@@ -86,3 +86,61 @@ func GetHrById(c *fiber.Ctx) error {
 	})
 
 }
+
+func UpdateHr(c *fiber.Ctx) error {
+	var hr model.Hr
+	id := c.Params("id")
+
+	if err := c.BodyParser(&hr); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"success": false,
+			"error":   "Failed to parse request body",
+		})
+	}
+	var existingHr model.Hr
+
+	if result := database.DBConn.First(&existingHr, id); result.Error != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"success": false,
+			"message": "Hr Record not found",
+		})
+	}
+	if hr.Name != "" {
+		existingHr.Name = hr.Name
+	}
+
+	if hr.Email != "" {
+		existingHr.Email = hr.Email
+
+		var existingEmail model.Hr
+		if err := database.DBConn.Where("email:?", hr.Email).First(&existingEmail).Error; err == nil {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+				"success": false,
+				"error":   "Email already exists",
+			})
+		}
+	}
+	if hr.Password != "" {
+		// If the password is provided, hash it before saving
+		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(hr.Password), bcrypt.DefaultCost)
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"error": "Failed to hash password",
+			})
+		}
+		existingHr.Password = string(hashedPassword)
+	}
+
+	if result := database.DBConn.Save(&existingHr); result.Error != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"success": false,
+			"error":   "Failed to update HR record",
+		})
+	}
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"success": true,
+		"message": "HR record updated successfully",
+		"data":    existingHr,
+	})
+
+}
