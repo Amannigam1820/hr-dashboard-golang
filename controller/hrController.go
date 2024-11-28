@@ -19,10 +19,10 @@ func CreateHr(c *fiber.Ctx) error {
 		})
 	}
 
-	if hr.Name == "" || hr.Email == "" || hr.Password == "" {
+	if hr.Name == "" || hr.Email == "" || hr.Password == "" || hr.Role == "" {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"success": "false",
-			"error":   "Name and Email and Password are required fields",
+			"error":   "Name and Email and Password, role are required fields",
 		})
 	}
 
@@ -197,7 +197,8 @@ func LoginHr(c *fiber.Ctx) error {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id":    existingHr.ID,
 		"email": existingHr.Email,
-		"exp":   time.Now().Add(time.Hour * 24),
+		"role":  existingHr.Role,
+		"exp":   time.Now().Add(time.Hour * 24).Unix(),
 	})
 
 	secretKey := []byte("hrdashboard")
@@ -226,14 +227,14 @@ func LoginHr(c *fiber.Ctx) error {
 
 }
 func Logout(c *fiber.Ctx) error {
-	// Clear the JWT cookie by setting its value to an empty string and setting its expiration time to the past
+
 	c.Cookie(&fiber.Cookie{
-		Name:     "token",                        // Name of the cookie
-		Value:    "",                             // Set the value to empty
-		Expires:  time.Now().Add(-1 * time.Hour), // Expire the cookie in the past to remove it
-		HTTPOnly: true,                           // Keep the cookie HTTPOnly for security
-		Secure:   false,                          // Set to true if using HTTPS
-		SameSite: "Strict",                       // Prevent the cookie from being sent in cross-site requests
+		Name:     "token",
+		Value:    "",
+		Expires:  time.Now().Add(-1 * time.Hour),
+		HTTPOnly: true,
+		Secure:   false,
+		SameSite: "Strict",
 	})
 
 	// Return a success response indicating the user has logged out
