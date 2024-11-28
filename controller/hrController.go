@@ -144,3 +144,25 @@ func UpdateHr(c *fiber.Ctx) error {
 	})
 
 }
+
+func DeleteHr(c *fiber.Ctx) error {
+	id := c.Params("id")
+	var hr model.Hr
+
+	if err := database.DBConn.First(&hr, id).Error; err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"success": false,
+			"error":   "HR record not found",
+		})
+	}
+	if result := database.DBConn.Delete(&hr); result.Error != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"success": false,
+			"error":   "Failed to delete HR record",
+		})
+	}
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"success": true,
+		"message": "HR record deleted successfully",
+	})
+}
