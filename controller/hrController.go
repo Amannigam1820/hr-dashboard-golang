@@ -139,7 +139,7 @@ func UpdateHr(c *fiber.Ctx) error {
 	}
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"success": true,
-		"message": "HR record updated successfully",
+		"message": "HR record updated successfully !",
 		"data":    existingHr,
 	})
 
