@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/Amannigam1820/hr-dashboard-golang/config"
 	"github.com/Amannigam1820/hr-dashboard-golang/database"
 	"github.com/Amannigam1820/hr-dashboard-golang/router"
 	"github.com/gofiber/fiber/v2"
@@ -11,6 +12,7 @@ func init() {
 }
 
 func main() {
+	config.InitCloudinary()
 
 	sqlDb, err := database.DBConn.DB()
 	if err != nil {

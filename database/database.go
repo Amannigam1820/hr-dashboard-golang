@@ -24,7 +24,7 @@ func ConnectDB() {
 	log.Println("Database connection successfully")
 	err = db.AutoMigrate(
 		&model.Hr{},
-		//&model.Employee{},
+		&model.Employee{},
 	)
 	if err != nil {
 		log.Println("Some error ")

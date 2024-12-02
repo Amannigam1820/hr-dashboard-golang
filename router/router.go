@@ -7,6 +7,7 @@ import (
 func SetupRoutes(app *fiber.App) {
 
 	SetupHRRoutes(app)
+	SetupEmployeeRoutes(app)
 	//SetupHRRoutes(app)
 
 }
