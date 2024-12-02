@@ -95,7 +95,6 @@ func CreateEmployee(c *fiber.Ctx) error {
 		"message": "Hr Created SuccessFully",
 		"Hr":      employee,
 	})
-
 }
 
 func GetAllEmployee(c *fiber.Ctx) error {
@@ -221,5 +220,4 @@ func UpdateEmployee(c *fiber.Ctx) error {
 		"message": "HR record updated successfully !",
 		"data":    existingEmployee,
 	})
-
 }
