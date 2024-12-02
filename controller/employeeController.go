@@ -151,3 +151,75 @@ func DeleteEmployee(c *fiber.Ctx) error {
 		"message": "Employee record deleted successfully",
 	})
 }
+
+func UpdateEmployee(c *fiber.Ctx) error {
+	id := c.Params("id")
+	var employee model.Employee
+
+	if err := c.BodyParser(&employee); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"success": false,
+			"error":   "Failed to parse request body",
+		})
+	}
+	var existingEmployee model.Employee
+	if result := database.DBConn.First(&existingEmployee, id); result.Error != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"success": false,
+			"message": "Employee Record not found",
+		})
+	}
+	if employee.Name != "" {
+		existingEmployee.Name = employee.Name
+	}
+	if employee.ContactNumber != "" {
+		existingEmployee.ContactNumber = employee.ContactNumber
+	}
+	if employee.Email != "" {
+		existingEmployee.Email = employee.Email
+		var existingEmail model.Employee
+		if err := database.DBConn.Where("email:?", employee.Email).First(&existingEmail).Error; err == nil {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+				"success": false,
+				"error":   "Email already exists",
+			})
+		}
+	}
+	if employee.TechStack != "" {
+		existingEmployee.TechStack = employee.TechStack
+	}
+	if employee.Position != "" {
+		existingEmployee.Position = employee.Position
+	}
+	if employee.YearsOfExperience != 0 {
+		existingEmployee.YearsOfExperience = employee.YearsOfExperience
+	}
+	if employee.CasualLeave != 0 {
+		existingEmployee.CasualLeave = employee.CasualLeave
+	}
+	if employee.EarnedLeave != 0 {
+		existingEmployee.EarnedLeave = employee.EarnedLeave
+	}
+	if employee.Salary != 0 {
+		existingEmployee.Salary = employee.Salary
+	}
+	if employee.Performance != "" {
+		existingEmployee.Performance = employee.Performance
+	}
+	if employee.Address != "" {
+		existingEmployee.Address = employee.Address
+	}
+
+	if result := database.DBConn.Save(&existingEmployee); result.Error != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"success": false,
+			"error":   "Failed to update HR record",
+		})
+	}
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"success": true,
+		"message": "HR record updated successfully !",
+		"data":    existingEmployee,
+	})
+
+}
