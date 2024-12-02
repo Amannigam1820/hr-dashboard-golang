@@ -95,12 +95,21 @@ func CreateEmployee(c *fiber.Ctx) error {
 		"message": "Hr Created SuccessFully",
 		"Hr":      employee,
 	})
-	// db := c.Locals("db").(*gorm.DB)
-	// err = db.Create(&employee).Error
-	// if err != nil {
-	// 	return fiber.NewError(fiber.StatusInternalServerError, fmt.Sprintf("Error saving employee: %v", err))
-	// }
 
-	// // Respond with created employee data
-	// return c.JSON(employee)
+}
+
+func GetAllEmployee(c *fiber.Ctx) error {
+	var employees []model.Employee
+
+	if result := database.DBConn.Find(&employees); result.Error != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"success": false,
+			"error":   "Failed to retrieve Employee records",
+		})
+	}
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+
+		"data":    employees,
+		"success": true,
+	})
 }

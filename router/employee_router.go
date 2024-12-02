@@ -9,5 +9,6 @@ func SetupEmployeeRoutes(app *fiber.App) {
 	employeeGroup := app.Group("/api/employee")
 
 	employeeGroup.Post("/", controller.CreateEmployee)
+	employeeGroup.Get("/all", controller.GetAllEmployee)
 
 }
