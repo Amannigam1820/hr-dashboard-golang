@@ -129,3 +129,25 @@ func GetEmployeeById(c *fiber.Ctx) error {
 		"hr":      employee,
 	})
 }
+
+func DeleteEmployee(c *fiber.Ctx) error {
+	id := c.Params("id")
+	var employee model.Employee
+
+	if err := database.DBConn.First(&employee, id).Error; err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"success": false,
+			"error":   "Employee record not found",
+		})
+	}
+	if result := database.DBConn.Delete(&employee); result.Error != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"success": false,
+			"error":   "Failed to delete HR record",
+		})
+	}
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"success": true,
+		"message": "Employee record deleted successfully",
+	})
+}
