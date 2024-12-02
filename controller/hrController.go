@@ -242,3 +242,20 @@ func Logout(c *fiber.Ctx) error {
 		"message": "Logged out successfully",
 	})
 }
+func GetUserInfo(c *fiber.Ctx) error {
+	user, ok := c.Locals("user").(model.Hr)
+	if !ok {
+		// If user is not found or type assertion fails, return an error
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"error": "User not authenticated or not found in context",
+		})
+	}
+
+	// Return the logged-in user information
+	return c.JSON(fiber.Map{
+		"id":    user.ID,
+		"name":  user.Name,
+		"email": user.Email,
+		"role":  user.Role,
+	})
+}
