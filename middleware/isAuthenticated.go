@@ -7,7 +7,6 @@ import (
 	"github.com/Amannigam1820/hr-dashboard-golang/model"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
-	//"github.com/golang-jwt/jwt/v5"
 )
 
 var jwtSecret = []byte("hrdashboard") // Replace with your actual secret key

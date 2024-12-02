@@ -128,7 +128,8 @@ func UpdateHr(c *fiber.Ctx) error {
 		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(hr.Password), bcrypt.DefaultCost)
 		if err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-				"error": "Failed to hash password",
+				"success": false,
+				"error":   "Failed to hash password",
 			})
 		}
 		existingHr.Password = string(hashedPassword)
@@ -244,8 +245,9 @@ func Logout(c *fiber.Ctx) error {
 }
 func GetUserInfo(c *fiber.Ctx) error {
 	user, ok := c.Locals("user").(model.Hr)
+	//fmt.Println("user :", user, "ok :", ok)
 	if !ok {
-		// If user is not found or type assertion fails, return an error
+
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "User not authenticated or not found in context",
 		})
