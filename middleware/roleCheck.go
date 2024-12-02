@@ -30,8 +30,8 @@ func RoleCheck(roles ...string) fiber.Handler {
 			return secretKey, nil
 		})
 
-		fmt.Println(token.Valid)
-		fmt.Println(token, err)
+		//	fmt.Println(token.Valid)
+		//	fmt.Println(token, err)
 
 		if err != nil || !token.Valid {
 			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{

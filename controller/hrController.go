@@ -124,7 +124,7 @@ func UpdateHr(c *fiber.Ctx) error {
 		}
 	}
 	if hr.Password != "" {
-		// If the password is provided, hash it before saving
+
 		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(hr.Password), bcrypt.DefaultCost)
 		if err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -187,7 +187,7 @@ func LoginHr(c *fiber.Ctx) error {
 	}
 	err := bcrypt.CompareHashAndPassword([]byte(existingHr.Password), []byte(hr.Password))
 	if err != nil {
-		// If password doesn't match, return an error
+
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"success": false,
 			"error":   "Invalid email or password",
@@ -237,7 +237,6 @@ func Logout(c *fiber.Ctx) error {
 		SameSite: "Strict",
 	})
 
-	// Return a success response indicating the user has logged out
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"success": true,
 		"message": "Logged out successfully",

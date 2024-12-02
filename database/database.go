@@ -7,7 +7,6 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-	//"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
 var DBConn *gorm.DB
@@ -27,5 +26,8 @@ func ConnectDB() {
 		&model.Hr{},
 		//&model.Employee{},
 	)
+	if err != nil {
+		log.Println("Some error ")
+	}
 	DBConn = db
 }

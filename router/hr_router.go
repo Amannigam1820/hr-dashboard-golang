@@ -6,11 +6,9 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-// SetupHRRoutes sets up the routes for HR related operations
 func SetupHRRoutes(app *fiber.App) {
 	hrGroup := app.Group("/api/hr")
 
-	// Define the HR routes
 	hrGroup.Post("/", middleware.RoleCheck("Super-Admin"), controller.CreateHr)
 	hrGroup.Get("/all", controller.GetAllHr)
 	hrGroup.Get("/:id", middleware.RoleCheck("Super-Admin"), controller.GetHrById)
