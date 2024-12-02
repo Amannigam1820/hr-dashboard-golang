@@ -12,58 +12,6 @@ import (
 
 var jwtSecret = []byte("hrdashboard") // Replace with your actual secret key
 
-// IsAuthenticated middleware
-// func IsAuthenticated() fiber.Handler {
-// 	return func(c *fiber.Ctx) error {
-// 		// Get token from cookies
-// 		tokenString := c.Cookies("token")
-// 		if tokenString == "" {
-// 			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-// 				"error": "Authentication token is missing",
-// 			})
-// 		}
-
-// 		fmt.Println(tokenString)
-
-// 		// Parse and validate the token
-// 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-// 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-// 				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
-// 			}
-// 			return jwtSecret, nil
-// 		})
-
-// 		if err != nil || !token.Valid {
-// 			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-// 				"error": "Invalid or expired token",
-// 			})
-// 		}
-
-// 		// Extract claims
-// 		claims, ok := token.Claims.(jwt.MapClaims)
-// 		if !ok || claims["user_id"] == nil {
-// 			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-// 				"error": "Invalid token claims",
-// 			})
-// 		}
-
-// 		userID := uint(claims["user_id"].(float64))
-
-// 		// Fetch user details from the database by explicitly mentioning the ID column
-// 		var user model.Hr
-// 		if err := database.DBConn.Where("id = ?", userID).First(&user).Error; err != nil {
-// 			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-// 				"error": "User not found",
-// 			})
-// 		}
-// 		fmt.Println(&user)
-
-// 		// Store user in context
-// 		c.Locals("user", user)
-// 		return c.Next()
-// 	}
-// }
-
 func IsAuthenticated() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		// Get token from cookies
