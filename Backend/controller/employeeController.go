@@ -111,6 +111,7 @@ func GetEmployeeStats(c *fiber.Ctx) error {
 	// Initialize maps to store the distribution data
 	genderDistribution := make(map[string]int)
 	departmentDistribution := make(map[string]int)
+	positionDistribution := make(map[string]int)
 	locationDistribution := make(map[string]int)
 
 	// Iterate through the employees to count distributions
@@ -120,6 +121,9 @@ func GetEmployeeStats(c *fiber.Ctx) error {
 
 		// Department Distribution
 		departmentDistribution[employee.Department]++
+
+		// Postion Distribution
+		positionDistribution[employee.Position]++
 
 		// Location Distribution
 		locationDistribution[employee.Address]++
@@ -131,6 +135,7 @@ func GetEmployeeStats(c *fiber.Ctx) error {
 		"data": fiber.Map{
 			"genderDistribution":     genderDistribution,
 			"departmentDistribution": departmentDistribution,
+			"positionDistribution":   positionDistribution,
 			"locationDistribution":   locationDistribution,
 		},
 	})
@@ -241,6 +246,9 @@ func UpdateEmployee(c *fiber.Ctx) error {
 	}
 	if employee.Salary != 0 {
 		existingEmployee.Salary = employee.Salary
+	}
+	if employee.Department != "" {
+		existingEmployee.Department = employee.Department
 	}
 	if employee.Performance != "" {
 		existingEmployee.Performance = employee.Performance
