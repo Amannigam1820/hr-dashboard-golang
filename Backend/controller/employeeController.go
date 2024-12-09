@@ -97,6 +97,45 @@ func CreateEmployee(c *fiber.Ctx) error {
 	})
 }
 
+func GetEmployeeStats(c *fiber.Ctx) error {
+	var employees []model.Employee
+
+	// Fetch all employees from the database
+	if result := database.DBConn.Find(&employees); result.Error != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"success": false,
+			"error":   "Failed to retrieve Employee records",
+		})
+	}
+
+	// Initialize maps to store the distribution data
+	genderDistribution := make(map[string]int)
+	departmentDistribution := make(map[string]int)
+	locationDistribution := make(map[string]int)
+
+	// Iterate through the employees to count distributions
+	for _, employee := range employees {
+		// Gender Distribution
+		genderDistribution[employee.Gender]++
+
+		// Department Distribution
+		departmentDistribution[employee.Department]++
+
+		// Location Distribution
+		locationDistribution[employee.Address]++
+	}
+
+	// Return the aggregated data in the required format without age distribution
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"success": true,
+		"data": fiber.Map{
+			"genderDistribution":     genderDistribution,
+			"departmentDistribution": departmentDistribution,
+			"locationDistribution":   locationDistribution,
+		},
+	})
+}
+
 func GetAllEmployee(c *fiber.Ctx) error {
 	var employees []model.Employee
 

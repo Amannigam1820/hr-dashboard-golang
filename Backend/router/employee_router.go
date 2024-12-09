@@ -11,7 +11,9 @@ func SetupEmployeeRoutes(app *fiber.App) {
 
 	employeeGroup.Post("/", middleware.RoleCheck("Hr-Admin", "Super-Admin"), controller.CreateEmployee)
 	employeeGroup.Get("/all", middleware.RoleCheck("Hr-Admin", "Super-Admin"), controller.GetAllEmployee)
+	employeeGroup.Get("/stats", middleware.RoleCheck("Hr-Admin", "Super-Admin"), controller.GetEmployeeStats)
 	employeeGroup.Get("/:id", middleware.RoleCheck("Hr-Admin", "Super-Admin"), controller.GetEmployeeById)
+
 	employeeGroup.Delete("/:id", middleware.RoleCheck("Hr-Admin", "Super-Admin"), controller.DeleteEmployee)
 	employeeGroup.Put("/:id", middleware.RoleCheck("Hr-Admin", "Super-Admin"), controller.UpdateEmployee)
 

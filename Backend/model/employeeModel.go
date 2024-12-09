@@ -9,6 +9,8 @@ type Employee struct {
 	Name              string     `json:"name" gorm:"not null;column:name;size:100"`
 	Email             string     `json:"email" gorm:"not null;column:email;size:100"`
 	ContactNumber     string     `json:"contact_number" gorm:"column:contact_number;size:15"`
+	Gender            string     `json:"gender" gorm:"column:gender;size:15"`
+	Department        string     `json:"department" gorm:"column:department"`
 	TechStack         string     `json:"tech_stack" gorm:"column:tech_stack;size:255"`
 	DateOfJoining     *time.Time `json:"date_of_joining" gorm:"column:date_of_joining"`
 	Position          string     `json:"position" gorm:"column:position;size:100"`
@@ -22,6 +24,7 @@ type Employee struct {
 	Resume            string     `json:"resume" gorm:"column:resume"`
 	ExperienceLetter  string     `json:"experience_letter" gorm:"column:experience_letter"`
 	ReleivingLetter   string     `json:"releiving_letter" gorm:"column:releiving_letter"`
-	CreatedAt         time.Time  `json:"created_at" gorm:"autoCreateTime"`
-	UpdatedAt         time.Time  `json:"updated_at" gorm:"autoUpdateTime"`
+
+	CreatedAt time.Time `json:"created_at" gorm:"autoCreateTime"`
+	UpdatedAt time.Time `json:"updated_at" gorm:"autoUpdateTime"`
 }
